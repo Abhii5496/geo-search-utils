@@ -1,4 +1,4 @@
-# Google Maps URL Expander
+# Google Maps URL DATA
 
 A TypeScript utility to expand Google Maps short URLs and extract coordinates from various URL
 patterns.
