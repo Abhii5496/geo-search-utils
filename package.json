@@ -1,0 +1,30 @@
+{
+  "name": "google-maps-long-url",
+  "version": "1.0.0",
+  "description": "TypeScript utility for expanding Google Maps short URLs and extracting coordinates from various patterns. Handles both direct coordinate extraction and URL expansion.",
+  "main": "dist/index.cjs",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    "import": "./dist/index.mjs",
+    "require": "./dist/index.cjs"
+  },
+  "scripts": {
+    "dev": "tsup src/index.ts --dts --format esm,cjs --out-dir dist --watch",
+    "build": "tsup src/index.ts --dts --format esm,cjs --out-dir dist",
+    "test": "ts-node test/index.ts"
+  },
+  "keywords": [],
+  "author": "@Abhii5496",
+  "license": "MIT",
+  "devDependencies": {
+    "@tsconfig/node18": "^18.2.4",
+    "@types/node": "^22.15.21",
+    "ts-node": "^10.9.2",
+    "tsup": "^8.5.0",
+    "typescript": "^5.8.3"
+  }
+}
