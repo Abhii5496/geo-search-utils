@@ -20,7 +20,7 @@ var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: tru
 // src/index.ts
 var index_exports = {};
 __export(index_exports, {
-  getFullUrl: () => getFullUrl
+  getUrlData: () => getUrlData
 });
 module.exports = __toCommonJS(index_exports);
 
@@ -70,7 +70,7 @@ function extractCoordinatesFromUrl(url) {
 }
 
 // src/index.ts
-async function getFullUrl(shortUrl) {
+async function getUrlData(shortUrl) {
   if (!shortUrl.trim()) {
     return "";
   }
@@ -92,5 +92,5 @@ async function getFullUrl(shortUrl) {
 }
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
-  getFullUrl
+  getUrlData
 });

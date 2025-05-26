@@ -1,10 +1,9 @@
 interface Coordinates {
-  latitude: number
-  longitude: number
-  full_url: string
-  source: string
+    latitude: number;
+    longitude: number;
+    source: string;
 }
 
-declare function getFullUrl(shortUrl: string): Promise<string | Coordinates | null>
+declare function getUrlData(shortUrl: string): Promise<string | Coordinates | null>;
 
-export { getFullUrl }
+export { getUrlData };

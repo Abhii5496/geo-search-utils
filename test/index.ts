@@ -1,8 +1,8 @@
-import { getFullUrl } from "../src"
+import { getUrlData } from "../src"
 
-async function testGetFullUrl() {
-  const result = await getFullUrl("https://maps.app.goo.gl/1yHoMqAp4h5a6aae7")
+async function testGetUrlData() {
+  const result = await getUrlData("https://maps.app.goo.gl/1yHoMqAp4h5a6aae7")
   console.log(result)
 }
 
-testGetFullUrl()
+testGetUrlData()

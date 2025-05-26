@@ -1,6 +1,6 @@
 import { Coordinates, extractCoordinatesFromUrl } from "./utils"
 
-export async function getFullUrl(shortUrl: string) {
+export async function getUrlData(shortUrl: string) {
   if (!shortUrl.trim()) {
     return ""
   }

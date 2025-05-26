@@ -44,7 +44,7 @@ function extractCoordinatesFromUrl(url) {
 }
 
 // src/index.ts
-async function getFullUrl(shortUrl) {
+async function getUrlData(shortUrl) {
   if (!shortUrl.trim()) {
     return "";
   }
@@ -65,5 +65,5 @@ async function getFullUrl(shortUrl) {
   }
 }
 export {
-  getFullUrl
+  getUrlData
 };
