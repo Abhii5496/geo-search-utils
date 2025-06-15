@@ -20,7 +20,9 @@ var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: tru
 // src/index.ts
 var index_exports = {};
 __export(index_exports, {
-  getUrlData: () => getUrlData
+  getAddressByQuery: () => getAddressByQuery,
+  getUrlData: () => getUrlData,
+  searchAddress: () => searchAddress
 });
 module.exports = __toCommonJS(index_exports);
 
@@ -68,11 +70,47 @@ function extractCoordinatesFromUrl(url) {
   }
   return null;
 }
+var getAddress = async (latitude, longitude, lang) => {
+  try {
+    const res = await fetch(
+      `https://api-bdc.io/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=${lang?.lang ?? "en"}`
+    );
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    return error;
+  }
+};
+function transformLocationData(data, sourceUrl) {
+  const districtEntry = data.localityInfo.administrative.find((entry) => entry.order === 9);
+  return {
+    latitude: data.latitude,
+    longitude: data.longitude,
+    sourceUrl,
+    address: {
+      countryName: data.countryName,
+      countryCode: data.countryCode,
+      state: data.principalSubdivision,
+      stateCode: data.principalSubdivisionCode,
+      postcode: data.postcode || "",
+      // fallback if missing
+      plusCode: data.plusCode || "",
+      district: districtEntry?.name || "",
+      lookupSource: data.lookupSource || "coordinates",
+      localityLanguageRequested: data.localityLanguageRequested || "en",
+      continent: data.continent,
+      continentCode: data.continentCode,
+      city: data.city,
+      locality: data.locality
+    }
+  };
+}
 
 // src/index.ts
-async function getUrlData(shortUrl) {
+var import_leaflet_geosearch = require("leaflet-geosearch");
+async function getUrlData(shortUrl, lang) {
   if (!shortUrl.trim()) {
-    return "";
+    return { error: "Empty URL" };
   }
   try {
     const response = await fetch(shortUrl, {
@@ -82,7 +120,17 @@ async function getUrlData(shortUrl) {
     const expandedUrl = response.url;
     if (expandedUrl) {
       const coordinates = extractCoordinatesFromUrl(expandedUrl);
-      return coordinates || expandedUrl;
+      if (coordinates) {
+        const data = await getAddress(
+          coordinates.latitude,
+          coordinates.longitude,
+          lang
+        );
+        if (data) {
+          return transformLocationData(data, expandedUrl);
+        }
+      }
+      return expandedUrl;
     }
     return expandedUrl;
   } catch (error) {
@@ -90,7 +138,27 @@ async function getUrlData(shortUrl) {
     return null;
   }
 }
+var getAddressByQuery = async (query) => {
+  try {
+    const provider = new import_leaflet_geosearch.OpenStreetMapProvider();
+    const results = await provider.search({ query });
+    return results;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+};
+var searchAddress = async (query) => {
+  try {
+    const data = await getAddressByQuery(query);
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
-  getUrlData
+  getAddressByQuery,
+  getUrlData,
+  searchAddress
 });

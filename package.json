@@ -1,7 +1,7 @@
 {
-  "name": "google-maps-long-url",
+  "name": "location-utils",
   "version": "1.0.0",
-  "description": "TypeScript utility for expanding Google Maps short URLs and extracting coordinates from various patterns. Handles both direct coordinate extraction and URL expansion.",
+  "description": "A powerful TypeScript utility that enables you to use Google Maps features without requiring an API key! Extract location data, search addresses, and process Google Maps URLs - all without authentication. Supports multiple URL patterns, coordinate extraction, and address search functionality using OpenStreetMap.",
   "main": "dist/index.cjs",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
@@ -17,7 +17,18 @@
     "build": "tsup src/index.ts --dts --format esm,cjs --out-dir dist",
     "test": "ts-node test/index.ts"
   },
-  "keywords": [],
+  "keywords": [
+    "google-maps",
+    "location",
+    "coordinates",
+    "geocoding",
+    "address-search",
+    "url-parser",
+    "typescript",
+    "no-api-key",
+    "maps",
+    "geolocation"
+  ],
   "author": "@Abhii5496",
   "license": "MIT",
   "devDependencies": {
@@ -26,5 +37,6 @@
     "ts-node": "^10.9.2",
     "tsup": "^8.5.0",
     "typescript": "^5.8.3"
-  }
+  },
+  "dependencies": {}
 }
