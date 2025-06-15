@@ -1,6 +1,5 @@
 # Location Utils
 
-=======
 
 A powerful TypeScript utility that enables you to use Google Maps features without requiring an API
 key! Extract location data, search addresses, and process Google Maps URLs - all without the need
@@ -46,16 +45,12 @@ console.log(results)
 ### URL Processing (No API Key Required!)
 
 ```typescript
-import { getDataByUrl, extractCoordinates } from "location-utils"
+import { getDataByUrl } from "location-utils"
 
 // Expand a short URL without API key
-const expandedUrl = await getDataByUrl("https://maps.app.goo.gl/abc123")
-console.log(expandedUrl)
+const data = await getDataByUrl("https://maps.app.goo.gl/abc123")
+console.log(data)
 
-// Extract coordinates from a URL
-const coordinates = extractCoordinates("https://www.google.com/maps?q=51.5074,-0.1278")
-console.log(coordinates)
-// Output: { lat: 51.5074, lng: -0.1278 }
 ```
 
 ## API Reference
