@@ -198,7 +198,7 @@ export function transformLocationData(data: RawLocationData, sourceUrl: string):
   }
 }
 
-interface NominatimResponse {
+export interface NominatimResponse {
   place_id: number
   lat: string
   lon: string

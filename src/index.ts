@@ -6,6 +6,7 @@ import {
   transformLocationData,
   RawLocationData,
   getAddressByQuery,
+  NominatimResponse,
 } from "./utils"
 
 export async function getDataByUrl(url: string, lang?: LangTypes) {
@@ -54,3 +55,5 @@ export const searchAddress = async (query: string) => {
     return { error: true, message: "Something went wrong" }
   }
 }
+
+export type { NominatimResponse }

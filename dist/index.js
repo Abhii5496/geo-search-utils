@@ -20,8 +20,7 @@ var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: tru
 // src/index.ts
 var index_exports = {};
 __export(index_exports, {
-  getAddressByQuery: () => getAddressByQuery,
-  getUrlData: () => getUrlData,
+  getDataByUrl: () => getDataByUrl,
   searchAddress: () => searchAddress
 });
 module.exports = __toCommonJS(index_exports);
@@ -105,15 +104,50 @@ function transformLocationData(data, sourceUrl) {
     }
   };
 }
+async function getAddressByQuery(query, retryCount = 0) {
+  try {
+    const res = await fetch(
+      `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json`
+    );
+    if (!res.ok) {
+      throw new Error("Nominatim API error");
+    }
+    const fullData = await res.json();
+    if (fullData.length === 0) {
+      return [];
+    }
+    const filteredData = fullData.map((item) => ({
+      place_id: item.place_id,
+      lat: item.lat,
+      lon: item.lon,
+      type: item.type,
+      place_rank: item.place_rank,
+      addresstype: item.addresstype,
+      name: item.name,
+      display_name: item.display_name
+    }));
+    return filteredData;
+  } catch (error) {
+    console.error(error);
+    if (retryCount < 3) {
+      await new Promise((resolve) => setTimeout(resolve, 1e3));
+      return getAddressByQuery(query, retryCount + 1);
+    }
+    return [];
+  }
+}
 
 // src/index.ts
-var import_leaflet_geosearch = require("leaflet-geosearch");
-async function getUrlData(shortUrl, lang) {
-  if (!shortUrl.trim()) {
+async function getDataByUrl(url, lang) {
+  if (!url.trim()) {
     return { error: "Empty URL" };
   }
+  const googleMapsRegex = /^https?:\/\/(www\.)?(google\.com\/maps|maps\.app\.goo\.gl)/i;
+  if (!googleMapsRegex.test(url)) {
+    return { error: "Invalid Google Maps URL" };
+  }
   try {
-    const response = await fetch(shortUrl, {
+    const response = await fetch(url, {
       method: "HEAD",
       redirect: "follow"
     });
@@ -138,27 +172,17 @@ async function getUrlData(shortUrl, lang) {
     return null;
   }
 }
-var getAddressByQuery = async (query) => {
-  try {
-    const provider = new import_leaflet_geosearch.OpenStreetMapProvider();
-    const results = await provider.search({ query });
-    return results;
-  } catch (error) {
-    console.log(error);
-    return error;
-  }
-};
 var searchAddress = async (query) => {
   try {
     const data = await getAddressByQuery(query);
     return data;
   } catch (error) {
     console.log(error);
+    return { error: true, message: "Something went wrong" };
   }
 };
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
-  getAddressByQuery,
-  getUrlData,
+  getDataByUrl,
   searchAddress
 });
