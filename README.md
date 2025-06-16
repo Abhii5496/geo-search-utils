@@ -1,6 +1,5 @@
 # Geo Search Utils
 
-=======
 
 A powerful TypeScript utility that enables you to use Google Maps features without requiring an API
 key! Extract location data, search addresses, and process Google Maps URLs - all without the need
