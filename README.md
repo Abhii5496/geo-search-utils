@@ -1,4 +1,4 @@
-# Location Utils
+# Geo Search Utils
 
 =======
 
@@ -21,10 +21,34 @@ for API authentication.
 - **Privacy Focused** - No need to share API keys or credentials
 - **Easy Integration** - Simple API with TypeScript support
 
+## Supported URL Patterns
+
+The package can extract coordinates from various Google Maps URL formats without requiring an API key:
+
+1. **Pattern 1**: `@latitude,longitude,zoomz`
+   ```
+   https://www.google.com/maps/@51.5074,-0.1278,15z
+   ```
+
+2. **Pattern 2**: `latitude,longitude?`
+   ```
+   https://www.google.com/maps/19.910945,+72.994643?
+   ```
+
+3. **Pattern 3**: `q=latitude,longitude`
+   ```
+   https://www.google.com/maps?q=40.7128,-74.0060
+   ```
+
+4. **Pattern 4**: `!3dlatitude!4dlongitude`
+   ```
+   https://www.google.com/maps/place/London/@51.5074,-0.1278!3d51.5074!4d-0.1278
+   ```
+
 ## Installation
 
 ```bash
-npm install location-utils
+npm install geo-search-utils
 ```
 
 ## Usage
@@ -32,7 +56,7 @@ npm install location-utils
 ### Address Search
 
 ```typescript
-import { getAddressByQuery, searchAddress } from "location-utils"
+import { getAddressByQuery, searchAddress } from "geo-search-utils"
 
 // Example 1: Basic address search
 const searchResults = await getAddressByQuery("London, UK")
@@ -46,16 +70,21 @@ console.log(results)
 ### URL Processing (No API Key Required!)
 
 ```typescript
-import { getDataByUrl, extractCoordinates } from "location-utils"
+import { expandUrl, extractCoordinates } from "geo-search-utils"
 
-// Expand a short URL without API key
-const expandedUrl = await getDataByUrl("https://maps.app.goo.gl/abc123")
+// Example 1: Extract coordinates from a URL with @ pattern
+const coords1 = extractCoordinates("https://www.google.com/maps/@51.5074,-0.1278,15z")
+console.log(coords1)
+// Output: { latitude: 51.5074, longitude: -0.1278, full_url: "...", source: "pattern1" }
+
+// Example 2: Extract coordinates from a URL with q= pattern
+const coords2 = extractCoordinates("https://www.google.com/maps?q=40.7128,-74.0060")
+console.log(coords2)
+// Output: { latitude: 40.7128, longitude: -74.0060, full_url: "...", source: "pattern3" }
+
+// Example 3: Expand a short URL
+const expandedUrl = await expandUrl("https://maps.app.goo.gl/abc123")
 console.log(expandedUrl)
-
-// Extract coordinates from a URL
-const coordinates = extractCoordinates("https://www.google.com/maps?q=51.5074,-0.1278")
-console.log(coordinates)
-// Output: { lat: 51.5074, lng: -0.1278 }
 ```
 
 ## API Reference
@@ -110,14 +139,18 @@ Parameters:
 
 Returns:
 
-- Object containing latitude and longitude
+- Object containing:
+  - `latitude`: The latitude coordinate
+  - `longitude`: The longitude coordinate
+  - `full_url`: The original URL
+  - `source`: The pattern used to extract coordinates ("pattern1" to "pattern4")
 
 ## Examples
 
 ### Basic Address Search
 
 ```typescript
-import { getAddressByQuery } from "location-utils"
+import { getAddressByQuery } from "geo-search-utils"
 
 async function findLocation() {
   try {
@@ -132,24 +165,28 @@ async function findLocation() {
 ### URL Processing (No API Key Required!)
 
 ```typescript
-import { getDataByUrl, extractCoordinates } from "location-utils"
+import { expandUrl, extractCoordinates } from "geo-search-utils"
 
 async function processMapUrl() {
   try {
-    // Expand a short URL without API key
-    // Example urls
-    //  'https://www.google.com/maps/@51.5074,-0.1278,15z',
-    //   'https://www.google.com/maps/19.910945,+72.994643?',
-    //   'https://www.google.com/maps?q=40.7128,-74.0060',
-    //   'https://www.google.com/maps/place/London/@51.5074,-0.1278!3d51.5074!4d-0.1278'
+    // Extract coordinates from different URL patterns
+    const urls = [
+      "https://www.google.com/maps/@51.5074,-0.1278,15z",
+      "https://www.google.com/maps/19.910945,+72.994643?",
+      "https://www.google.com/maps?q=40.7128,-74.0060",
+      "https://www.google.com/maps/place/London/@51.5074,-0.1278!3d51.5074!4d-0.1278"
+    ]
 
+    for (const url of urls) {
+      const coords = extractCoordinates(url)
+      console.log(`URL: ${url}`)
+      console.log("Coordinates:", coords)
+    }
+
+    // Expand a short URL
     const shortUrl = "https://maps.app.goo.gl/abc123"
-    const expandedUrl = await getDataByUrl(shortUrl)
+    const expandedUrl = await expandUrl(shortUrl)
     console.log("Expanded URL:", expandedUrl)
-
-    // Extract coordinates
-    const coords = extractCoordinates(expandedUrl)
-    console.log("Coordinates:", coords)
   } catch (error) {
     console.error("Error:", error)
   }

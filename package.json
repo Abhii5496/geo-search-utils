@@ -1,6 +1,6 @@
 {
-  "name": "location-utils",
-  "version": "1.0.0",
+  "name": "geo-search-utils",
+  "version": "1.0.1",
   "description": "A powerful TypeScript utility that enables you to use Google Maps features without requiring an API key! Extract location data, search addresses, and process Google Maps URLs - all without authentication. Supports multiple URL patterns, coordinate extraction, and address search functionality using OpenStreetMap.",
   "main": "dist/index.cjs",
   "module": "dist/index.mjs",
@@ -38,5 +38,15 @@
     "tsup": "^8.5.0",
     "typescript": "^5.8.3"
   },
-  "dependencies": {}
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Abhii5496/geo-search-utils.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Abhii5496/geo-search-utils/issues"
+  },
+  "homepage": "https://github.com/Abhii5496/geo-search-utils#readme"
 }
